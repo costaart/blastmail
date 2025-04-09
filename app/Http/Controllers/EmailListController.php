@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EmailList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmailListController extends Controller
 {
@@ -12,8 +13,20 @@ class EmailListController extends Controller
      */
     public function index()
     {
+
+        $search = request('search');
+        if ($search) {
+            $emailLists = EmailList::withCount('subscribers')
+            ->where('title', 'like', "%{$search}%")
+            ->orWhere('id', $search)
+            ->paginate(1);
+        } else {
+            $emailLists = EmailList::withCount('subscribers')->paginate(1);
+        }
+
         return view('email-list.index', [
-            'emailLists' => EmailList::paginate(10),
+            'emailLists' => $emailLists,
+            'search' => $search,
         ]);
     }
 
@@ -30,18 +43,32 @@ class EmailListController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
             'file' => 'required|file|max:2048',
         ]);
 
-        $file = $request->file('file');
-        $fileHandle = fopen($file->getRealPath(), 'r');
+        $items = $this->readCsvFile($request->file('file'));
+
+        // Garante q esse insert não role caso ocorra algum erro
+        DB::transaction(function () use ($request, $items) {
+            $emailList = EmailList::create([
+                'title' => $request->title,
+            ]);
+    
+            $emailList->subscribers()->createMany($items);
+        });
+
+        return to_route('email-list.index')->with('success', 'Email list created successfully.');
+    }
+
+    private function readCsvFile($file):array
+    {
         $items = [];
+        $fileHandle = fopen($file->getRealPath(), 'r');
 
         while (($row = fgetcsv($fileHandle, null, ',')) !== false) {
-            // dd($row);
-            if($row[0] == 'nome' && $row[1] == 'email') {
+            if ($row[0] == 'nome' && $row[1] == 'email') {
                 continue;
             }
 
@@ -49,20 +76,11 @@ class EmailListController extends Controller
                 'name' => $row[0],
                 'email' => $row[1],
             ];
-
         }
 
         fclose($fileHandle);
 
-        $emailList = EmailList::create([
-            'title' => $data['title'],
-        ]);
-
-        $emailList->subscribers()->createMany($items);
-
-        return to_route('email-list.index')->with('success', 'Email list created successfully.');
-
-        dd($data);
+        return $items;
     }
 
     /**
