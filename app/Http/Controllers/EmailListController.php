@@ -19,9 +19,9 @@ class EmailListController extends Controller
             $emailLists = EmailList::withCount('subscribers')
             ->where('title', 'like', "%{$search}%")
             ->orWhere('id', $search)
-            ->paginate(1);
+            ->paginate(10);
         } else {
-            $emailLists = EmailList::withCount('subscribers')->paginate(1);
+            $emailLists = EmailList::withCount('subscribers')->paginate(10);
         }
 
         return view('email-list.index', [
