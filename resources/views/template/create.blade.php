@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <x-h2>
-            {{ __('Email List') }} > {{ $emailList->title }} > {{ __('Add a new subscriber') }}
+            {{ __('Templates') }} > {{ __('Create a new template') }}
         </x-h2>
     </x-slot>
 
     <x-card>
-        <x-form :action="route('subscribers.create', $emailList)" post>
+        <x-form :action="route('template.store')" post>
 
             <div>
                 <x-input-label for="name" :value="__('Name')" />
@@ -14,17 +14,17 @@
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
             <div>
-                <x-input-label for="email" :value="__('Email')" />
-                <x-text-input id="email" class="block mt-1 w-full" name="email" :value="old('email')" autofocus />
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                <x-input-label for="body" :value="__('Body')" />
+                <x-richtext id="body" class="block mt-1 w-full" name="body" :value="old('body')" autofocus />
+                <x-input-error :messages="$errors->get('body')" class="mt-2" />
             </div>
 
             <div class="flex items-center space-x-4">
-                <x-link-secondary-button :href="route('subscribers.index', $emailList)">
+                <x-link-button :href="route('template.index')">
                     {{ __('Cancel') }}
                 </x-link-button>
                 <x-primary-button type="submit">
-                    {{ __('Add User') }}
+                    {{ __('Add Template') }}
                 </x-primary-button>
             </div>
 
