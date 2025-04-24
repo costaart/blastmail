@@ -11,7 +11,7 @@
             <div>
                 <span class="opacity-70">{{ __('Name') }}:</span> {{$template->name}} 
             </div>
-            <x-link-button :href="route('template.index')">
+            <x-link-button :href="route('templates.index')">
                 {{ __('Back to templates') }}
             </x-link-button>
         </div>

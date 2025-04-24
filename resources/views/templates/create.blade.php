@@ -1,30 +1,30 @@
 <x-app-layout>
     <x-slot name="header">
         <x-h2>
-            {{ __('Templates') }} > {{ $template->name }} > {{ __('Update') }}
+            {{ __('Templates') }} > {{ __('Create a new template') }}
         </x-h2>
     </x-slot>
 
     <x-card>
-        <x-form :action="route('template.update', $template)" put>
+        <x-form :action="route('templates.store')" post>
 
             <div>
                 <x-input-label for="name" :value="__('Name')" />
-                <x-text-input id="name" class="block mt-1 w-full" name="name" :value="old('name', $template->name)" autofocus />
+                <x-text-input id="name" class="block mt-1 w-full" name="name" :value="old('name')" autofocus />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
             <div>
                 <x-input-label for="body" :value="__('Body')" />
-                <x-richtext name="body" :value="old('body', $template->body)" />
+                <x-richtext id="body" class="block mt-1 w-full" name="body" :value="old('body')" autofocus />
                 <x-input-error :messages="$errors->get('body')" class="mt-2" />
             </div>
 
             <div class="flex items-center space-x-4">
-                <x-link-secondary-button :href="route('template.index')">
+                <x-link-secondary-button :href="route('templates.index')">
                     {{ __('Cancel') }}
                 </x-link-button>
                 <x-primary-button type="submit">
-                    {{ __('Edit') }}
+                    {{ __('Add Template') }}
                 </x-primary-button>
             </div>
 

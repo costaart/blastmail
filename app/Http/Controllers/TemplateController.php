@@ -18,7 +18,7 @@ class TemplateController extends Controller
             $templates = Template::paginate();
         }
 
-        return view('template.index', [
+        return view('templates.index', [
             'templates' => $templates,
             'search' => $search,
         ]);
@@ -26,7 +26,7 @@ class TemplateController extends Controller
 
     public function create()
     {
-        return view('template.create');
+        return view('templates.create');
     }
 
     public function store(Request $request)
@@ -37,17 +37,17 @@ class TemplateController extends Controller
         ]);
 
         Template::create($data);
-        return redirect()->route('template.index')->with('success', __('Template created successfully.'));
+        return redirect()->route('templates.index')->with('success', __('Template created successfully.'));
     }
 
     public function show(Template $template)
     {
-        return view('template.show', compact('template'));
+        return view('templates.show', compact('template'));
     }
 
     public function edit(Template $template)
     {
-        return view('template.edit', compact('template'));
+        return view('templates.edit', compact('template'));
 
     }
 
@@ -61,12 +61,12 @@ class TemplateController extends Controller
         $template->fill($data);
         $template->save();
 
-        return redirect()->route('template.index')->with('success', __('Template updated successfully.'));
+        return redirect()->route('templates.index')->with('success', __('Template updated successfully.'));
     }
 
     public function destroy(Template $template)
     {
         $template->delete();
-        return redirect()->route('template.index')->with('success', __('Template deleted successfully.'));
+        return redirect()->route('templates.index')->with('success', __('Template deleted successfully.'));
     }
 }

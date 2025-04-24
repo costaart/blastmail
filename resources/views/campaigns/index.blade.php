@@ -1,38 +1,34 @@
 <x-app-layout>
     <x-slot name="header">
         <x-h2>
-            {{ __('Templates') }} 
+            {{ __('Campaigns') }} 
         </x-h2>
     </x-slot>
 
     <x-card>
         <div class="flex justify-between items-center mb-4">
-            <x-link-button :href="route('template.create')">
-                {{ __('Create new template') }}
+            <x-link-button :href="route('campaigns.create')">
+                {{ __('Create new campaign') }}
             </x-link-button>
 
-            <x-form :action="route('template.index')" method="GET" class="w-2/5">
+            <x-form :action="route('campaigns.index')" method="GET" class="w-2/5">
                 <x-text-input name="search" placeholder="{{ __('Search') }}" :value="$search" />
             </x-form>
         </div>
             <x-table :headers="['#', __('Name'), __('Actions')]">
                 <x-slot name="body">
-                    @foreach ($templates as $template)
+                    @foreach ($campaigns as $campaign)
                         <tr>
-                            <x-table.td>{{ $template->id }}</x-table.td> 
-                            <x-table.td>{{ $template->name }}</x-table.td>
+                            <x-table.td>{{ $campaign->id }}</x-table.td> 
+                            <x-table.td>{{ $campaign->name }}</x-table.td>
                             <x-table.td>
                                 <div class="flex items-center space-x-2">
-                                    <x-purple-button :href="route('template.show', $template)">
+                                    {{-- <x-purple-button :href="route('campaigns.show', $campaign)">
                                         {{ __('View') }}
-                                    </x-purple-button>
+                                    </x-purple-button> --}}
 
-                                    <x-link-button secondary :href="route('template.edit', $template)">
-                                        {{ __('Edit') }}
-                                    </x-link-button>
-
-                                    <x-form :action="route('template.destroy', $template)" delete flat
-                                    onsubmit="return confirm('{{ __('Are you sure you want to delete this template?') }}')">
+                                    <x-form :action="route('campaigns.destroy', $campaign)" delete flat
+                                    onsubmit="return confirm('{{ __('Are you sure you want to delete this campaign?') }}')">
                                         <x-secondary-button type="submit">
                                             {{ __('Delete') }}
                                         </x-secondary-button>
@@ -46,7 +42,7 @@
             </x-table>
 
             <div class="mt-4">
-                {{ $templates->links() }}
+                {{ $campaigns->links() }}
             </div>
     </x-card>
 </x-app-layout>

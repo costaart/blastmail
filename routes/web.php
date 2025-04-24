@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\CampaignController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CampaignCreateSessionControl;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,8 +28,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/email-list/{emailList}/subscribers/create', [SubscriberController::class, 'create'])->name('subscribers.create');
     Route::post('/email-list/{emailList}/subscribers/create', [SubscriberController::class, 'store']);
     Route::delete('/email-list/{emailList}/subscribers/{subscriber}', [SubscriberController::class, 'destroy'])->name('subscribers.destroy');
+    Route::resource('templates', TemplateController::class);
 
-    Route::resource('template', TemplateController::class);
+    Route::get('/campaigns/create/{tab?}', [CampaignController::class, 'create'])
+    ->middleware(CampaignCreateSessionControl::class)
+    ->name('campaigns.create');
+
+    Route::post('/campaigns/create/{tab?}', [CampaignController::class, 'store']);
+    Route::resource('campaigns', CampaignController::class)->only(['index', 'destroy']);
 
 });
 
