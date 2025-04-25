@@ -40,7 +40,7 @@
 ![Visualizar Template](docs/screenshots/template-view.png)
 
 ### Criação de Campanha
-![Criação de Campanha](docs/screenshots/campaign-create.png)
+![Criação de Campanha](docs/screenshots/campaing-create.png)
 
 ### Review Criação de Campanha 
 ![Review de Campanha](docs/screenshots/campaign-create-2.png)
