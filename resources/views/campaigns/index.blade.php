@@ -23,9 +23,9 @@
                             <x-table.td>{{ $campaign->name }}</x-table.td>
                             <x-table.td>
                                 <div class="flex items-center space-x-2">
-                                    {{-- <x-purple-button :href="route('campaigns.show', $campaign)">
+                                    <x-purple-button :href="route('campaigns.show.statistics', $campaign)">
                                         {{ __('View') }}
-                                    </x-purple-button> --}}
+                                    </x-purple-button>
 
                                     <x-form :action="route('campaigns.destroy', $campaign)" delete flat
                                     onsubmit="return confirm('{{ __('Are you sure you want to delete this campaign?') }}')">

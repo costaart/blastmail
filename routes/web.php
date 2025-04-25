@@ -7,16 +7,13 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\CampaignController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CampaignCreateSessionControl;
+use App\Http\Controllers\TrackingController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/t/{mail}/o', [TrackingController::class, 'openings'])->name('tracking.openings');
+Route::get('/t/{mail}/c', [TrackingController::class, 'clicks'])->name('tracking.clicks');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -30,12 +27,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/email-list/{emailList}/subscribers/{subscriber}', [SubscriberController::class, 'destroy'])->name('subscribers.destroy');
     Route::resource('templates', TemplateController::class);
 
-    Route::get('/campaigns/create/{tab?}', [CampaignController::class, 'create'])
-    ->middleware(CampaignCreateSessionControl::class)
-    ->name('campaigns.create');
+    // Campaigns Routes
 
+    Route::get('/', [CampaignController::class, 'index'])->name('campaigns.index');
+
+    Route::get('/campaigns/create/{tab?}', [CampaignController::class, 'create'])->middleware(CampaignCreateSessionControl::class)->name('campaigns.create');
     Route::post('/campaigns/create/{tab?}', [CampaignController::class, 'store']);
-    Route::resource('campaigns', CampaignController::class)->only(['index', 'destroy']);
+    Route::delete('/campaigns/{campaign}', [CampaignController::class, 'destroy'])->name('campaigns.destroy');
+
+    Route::get('/campaigns/{campaign}/statistics', [CampaignController::class, 'showStatistics'])->name('campaigns.show.statistics');
+    Route::get('/campaigns/{campaign}/open', [CampaignController::class, 'showOpen'])->name('campaigns.show.open');
+    Route::get('/campaigns/{campaign}/clicked', [CampaignController::class, 'showClicked'])->name('campaigns.show.clicked');
+
+
 
 });
 
